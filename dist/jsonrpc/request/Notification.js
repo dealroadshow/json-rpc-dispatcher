@@ -58,6 +58,28 @@ var Notification = /*#__PURE__*/function () {
     value: function getParams() {
       return this.params;
     }
+    /**
+     * Get contents of result.headers
+     *
+     * @return {string|Headers}
+     */
+
+  }, {
+    key: "getHeaders",
+    value: function getHeaders() {
+      return this.params.headers;
+    }
+    /**
+     * Get contents of result.payload
+     *
+     * @return {*}
+     */
+
+  }, {
+    key: "getPayload",
+    value: function getPayload() {
+      return this.params.payload;
+    }
   }]);
 
   return Notification;

@@ -36,4 +36,22 @@ export default class Notification {
   getParams() {
     return this.params;
   }
+
+  /**
+   * Get contents of result.headers
+   *
+   * @return {string|Headers}
+   */
+  getHeaders() {
+    return this.params.headers;
+  }
+
+  /**
+   * Get contents of result.payload
+   *
+   * @return {*}
+   */
+  getPayload() {
+    return this.params.payload;
+  }
 }
