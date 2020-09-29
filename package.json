@@ -1,6 +1,6 @@
 {
-  "name": "@kuzorov/json-rpc-dispatcher",
-  "version": "2.4.3",
+  "name": "@dealroadshow/json-rpc-dispatcher",
+  "version": "2.4.4",
   "description": "JSON-RPC 2.0 client implementation",
   "keywords": [
     "json",
@@ -15,7 +15,7 @@
     "lint": "eslint --fix ./src",
     "test": "echo \"No tests specified\""
   },
-  "author": "Evgeniy Kuzorov <kuzorov@gmail.com>",
+  "author": "Zhenya Kuzorov <zhenya.kuzorov@finsight.com>",
   "dependencies": {
     "uuid": "^8.3.0"
   },
@@ -34,11 +34,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kuzorov/json-rpc-dispatcher.git"
+    "url": "git+https://github.com/dealroadshow/json-rpc-dispatcher.git"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kuzorov/json-rpc-dispatcher/issues"
-  },
-  "homepage": "https://github.com/kuzorov/json-rpc-dispatcher#readme"
+  "homepage": "https://github.com/dealroadshow/json-rpc-dispatcher#readme"
 }
