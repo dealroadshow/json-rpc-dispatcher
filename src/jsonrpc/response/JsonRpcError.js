@@ -1,33 +1,33 @@
 import Error from './Error';
 
 export default class JsonRpcError extends Error {
-  static invalidRequest({ id, data }) {
+  static invalidRequest({ id, message = 'Invalid request', data }) {
     return new JsonRpcError({
-      id, error: { message: 'Invalid request', code: -32600, data }
+      id, error: { message, code: -32600, data }
     });
   }
 
-  static methodNotFound({ id, data }) {
+  static methodNotFound({ id, message = 'Method not found', data }) {
     return new JsonRpcError({
-      id, error: { message: 'Method not found', code: -32601, data }
+      id, error: { message, code: -32601, data }
     });
   }
 
-  static invalidParams({ id, data }) {
+  static invalidParams({ id, message = 'Invalid params', data }) {
     return new JsonRpcError({
-      id, error: { message: 'Invalid params', code: -32602, data }
+      id, error: { message, code: -32602, data }
     });
   }
 
-  static internalError({ id, data }) {
+  static internalError({ id, message = 'Internal error', data }) {
     return new JsonRpcError({
-      id, error: { message: 'Internal error', code: -32603, data }
+      id, error: { message, code: -32603, data }
     });
   }
 
-  static parseError({ id, data }) {
+  static parseError({ id, message = 'Parse error', data }) {
     return new JsonRpcError({
-      id, error: { message: 'Parse error', code: -32700, data }
+      id, error: { message, code: -32700, data }
     });
   }
 }

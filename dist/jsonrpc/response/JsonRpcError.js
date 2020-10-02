@@ -46,11 +46,13 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
     key: "invalidRequest",
     value: function invalidRequest(_ref) {
       var id = _ref.id,
+          _ref$message = _ref.message,
+          message = _ref$message === void 0 ? 'Invalid request' : _ref$message,
           data = _ref.data;
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Invalid request',
+          message: message,
           code: -32600,
           data: data
         }
@@ -60,11 +62,13 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
     key: "methodNotFound",
     value: function methodNotFound(_ref2) {
       var id = _ref2.id,
+          _ref2$message = _ref2.message,
+          message = _ref2$message === void 0 ? 'Method not found' : _ref2$message,
           data = _ref2.data;
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Method not found',
+          message: message,
           code: -32601,
           data: data
         }
@@ -74,11 +78,13 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
     key: "invalidParams",
     value: function invalidParams(_ref3) {
       var id = _ref3.id,
+          _ref3$message = _ref3.message,
+          message = _ref3$message === void 0 ? 'Invalid params' : _ref3$message,
           data = _ref3.data;
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Invalid params',
+          message: message,
           code: -32602,
           data: data
         }
@@ -88,11 +94,13 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
     key: "internalError",
     value: function internalError(_ref4) {
       var id = _ref4.id,
+          _ref4$message = _ref4.message,
+          message = _ref4$message === void 0 ? 'Internal error' : _ref4$message,
           data = _ref4.data;
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Internal error',
+          message: message,
           code: -32603,
           data: data
         }
@@ -102,11 +110,13 @@ var JsonRpcError = /*#__PURE__*/function (_Error) {
     key: "parseError",
     value: function parseError(_ref5) {
       var id = _ref5.id,
+          _ref5$message = _ref5.message,
+          message = _ref5$message === void 0 ? 'Parse error' : _ref5$message,
           data = _ref5.data;
       return new JsonRpcError({
         id: id,
         error: {
-          message: 'Parse error',
+          message: message,
           code: -32700,
           data: data
         }
