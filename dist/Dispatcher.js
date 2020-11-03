@@ -5,11 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _Fetch = _interopRequireDefault(require("./adapters/Fetch"));
-
-var _parseResponse = _interopRequireDefault(require("./jsonrpc/parseResponse"));
+var _parse = _interopRequireDefault(require("./jsonrpc/parse"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -30,64 +32,80 @@ var Dispatcher = /*#__PURE__*/function () {
     this.responseInterceptors = [];
   }
   /**
-   * Request
+   * Execute remote procedure
    *
-   * @param payload
-   * @return {*|Promise.<TResult>}
+   * @param {*} payload
+   *
+   * @return {Success,Error}
    */
 
 
   _createClass(Dispatcher, [{
+    key: "call",
+    value: function () {
+      var _call = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(payload) {
+        var jsonRpcPayload, response;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                jsonRpcPayload = this.execRequestInterceptors((0, _parse.default)(payload));
+                _context.prev = 1;
+                _context.next = 4;
+                return this.getAdapter().call(jsonRpcPayload);
+
+              case 4:
+                response = _context.sent;
+                _context.next = 10;
+                break;
+
+              case 7:
+                _context.prev = 7;
+                _context.t0 = _context["catch"](1);
+                response = _context.t0;
+
+              case 10:
+                response = (0, _parse.default)(response);
+                return _context.abrupt("return", this.execResponseInterceptors(response, jsonRpcPayload));
+
+              case 12:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[1, 7]]);
+      }));
+
+      function call(_x) {
+        return _call.apply(this, arguments);
+      }
+
+      return call;
+    }()
+    /**
+     * Request
+     *
+     * @param payload
+     * @return {*|Promise.<*>}
+     * @deprecated
+     */
+
+  }, {
     key: "request",
     value: function request(payload) {
-      var _this = this;
-
-      payload = this.execRequestInterceptors(payload);
-      return this.getAdapter().request(payload).then(function (res) {
-        return _this.execResponseInterceptors((0, _parseResponse.default)(payload, res), payload);
-      }, function (res) {
-        return _this.execResponseInterceptors((0, _parseResponse.default)(payload, res), payload);
-      });
+      return this.call(payload);
     }
     /**
      * Notification
      *
      * @param payload
+     * @deprecated
      */
 
   }, {
     key: "notify",
     value: function notify(payload) {
-      return this.getAdapter().notify(payload, payload.getMethod()).catch(function (res) {
-        return (0, _parseResponse.default)(payload, res);
-      });
-    }
-    /**
-     * Request to specified url
-     *
-     * @param url
-     * @param {Array|object} payload
-     * @return {*|Promise.<TResult>}
-     */
-
-  }, {
-    key: "requestUrl",
-    value: function requestUrl(payload, url) {
-      var _this2 = this;
-
-      if (!(this.getAdapter() instanceof _Fetch.default)) {
-        throw new TypeError('Only Fetch adapter supports requestUrl method');
-      }
-
-      var adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), {
-        url: url
-      });
-      payload = this.execRequestInterceptors(payload);
-      return adapter.request(payload, payload.getId(), payload.getMethod()).then(function (res) {
-        return _this2.execResponseInterceptors((0, _parseResponse.default)(payload, res), payload);
-      }, function (res) {
-        return _this2.execResponseInterceptors((0, _parseResponse.default)(payload, res), payload);
-      });
+      return this.call(payload);
     }
     /**
      * Add interceptor before request
@@ -105,28 +123,6 @@ var Dispatcher = /*#__PURE__*/function () {
 
       this.requestInterceptors.push(callback);
       return this;
-    }
-    /**
-     * Notify to specified url
-     *
-     * @param url
-     * @param payload
-     * @return {*|Promise.<TResult>}
-     */
-
-  }, {
-    key: "notifyUrl",
-    value: function notifyUrl(payload, url) {
-      if (!(this.getAdapter() instanceof _Fetch.default)) {
-        throw new TypeError('Only Fetch adapter supports notifyUrl method');
-      }
-
-      var adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), {
-        url: url
-      });
-      return adapter.notify(payload, payload.getMethod()).catch(function (res) {
-        return (0, _parseResponse.default)(payload, res);
-      });
     }
     /**
      * Add interceptor before response

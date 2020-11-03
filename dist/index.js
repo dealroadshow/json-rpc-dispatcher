@@ -39,7 +39,7 @@ Object.defineProperty(exports, "parse", {
     return _parse.default;
   }
 });
-exports.interceptors = exports.adapters = exports.default = void 0;
+exports.interceptors = exports.adapters = exports.RpcError = exports.default = void 0;
 
 var _Fetch = _interopRequireDefault(require("./adapters/Fetch"));
 
@@ -76,3 +76,5 @@ var interceptors = {
 exports.interceptors = interceptors;
 var _default = _Dispatcher.default;
 exports.default = _default;
+var RpcError = _Error.default;
+exports.RpcError = RpcError;

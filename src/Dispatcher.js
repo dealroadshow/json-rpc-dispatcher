@@ -1,5 +1,4 @@
-import Fetch from './adapters/Fetch';
-import parseResponse from './jsonrpc/parseResponse';
+import parse from './jsonrpc/parse';
 
 export default class Dispatcher {
   /**
@@ -13,49 +12,45 @@ export default class Dispatcher {
   }
 
   /**
+   * Execute remote procedure
+   *
+   * @param {*} payload
+   *
+   * @return {Success,Error}
+   */
+  async call(payload) {
+    const jsonRpcPayload = this.execRequestInterceptors(parse(payload));
+
+    let response;
+    try {
+      response = await this.getAdapter().call(jsonRpcPayload);
+    } catch (error) {
+      response = error;
+    }
+    response = parse(response);
+
+    return this.execResponseInterceptors(response, jsonRpcPayload);
+  }
+
+  /**
    * Request
    *
    * @param payload
-   * @return {*|Promise.<TResult>}
+   * @return {*|Promise.<*>}
+   * @deprecated
    */
   request(payload) {
-    payload = this.execRequestInterceptors(payload);
-
-    return this.getAdapter().request(payload).then(
-      (res) => this.execResponseInterceptors(parseResponse(payload, res), payload),
-      (res) => this.execResponseInterceptors(parseResponse(payload, res), payload)
-    );
+    return this.call(payload);
   }
 
   /**
    * Notification
    *
    * @param payload
+   * @deprecated
    */
   notify(payload) {
-    return this.getAdapter().notify(payload, payload.getMethod())
-      .catch((res) => parseResponse(payload, res));
-  }
-
-  /**
-   * Request to specified url
-   *
-   * @param url
-   * @param {Array|object} payload
-   * @return {*|Promise.<TResult>}
-   */
-  requestUrl(payload, url) {
-    if (!(this.getAdapter() instanceof Fetch)) {
-      throw new TypeError('Only Fetch adapter supports requestUrl method');
-    }
-
-    let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
-    payload = this.execRequestInterceptors(payload);
-
-    return adapter.request(payload, payload.getId(), payload.getMethod()).then(
-      (res) => this.execResponseInterceptors(parseResponse(payload, res), payload),
-      (res) => this.execResponseInterceptors(parseResponse(payload, res), payload)
-    );
+    return this.call(payload);
   }
 
   /**
@@ -71,24 +66,6 @@ export default class Dispatcher {
     this.requestInterceptors.push(callback);
 
     return this;
-  }
-
-  /**
-   * Notify to specified url
-   *
-   * @param url
-   * @param payload
-   * @return {*|Promise.<TResult>}
-   */
-  notifyUrl(payload, url) {
-    if (!(this.getAdapter() instanceof Fetch)) {
-      throw new TypeError('Only Fetch adapter supports notifyUrl method');
-    }
-
-    let adapter = Object.assign(Object.create(this.getAdapter()), this.getAdapter(), { url });
-
-    return adapter.notify(payload, payload.getMethod())
-      .catch((res) => parseResponse(payload, res));
   }
 
   /**

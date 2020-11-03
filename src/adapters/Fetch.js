@@ -1,4 +1,4 @@
-export default class Fetch {
+class Fetch {
   /**
    *
    * @param {string} url
@@ -25,40 +25,31 @@ export default class Fetch {
   /**
    * Send request to server
    *
-   * @param {string} payload
+   * @param {string} request
    *
    * @return {Promise}
    */
-  request(payload) {
-    this.addMethodHeader(payload);
+  call(request) {
+    this.addMethodHeader(request);
 
-    return fetch(this.url, { body: JSON.stringify(payload), ...this.options })
+    return fetch(this.url, { body: JSON.stringify(request), ...this.options })
       .then((data) => data.json());
-  }
-
-  /**
-   * Send notification to server
-   *
-   * @param {string} payload
-   */
-  notify(payload) {
-    this.addMethodHeader(payload);
-
-    return fetch(this.url, { body: JSON.stringify(payload), ...this.options });
   }
 
   /**
    * Adds method header for logging purposes
    *
-   * @param payload
+   * @param request
    */
-  addMethodHeader(payload) {
-    if (!Array.isArray(payload)) {
-      this.options.headers['X-JsonRpc-Method'] = payload.method;
+  addMethodHeader(request) {
+    if (!Array.isArray(request)) {
+      this.options.headers['X-JsonRpc-Method'] = request.method;
     } else {
-      this.options.headers['X-JsonRpc-Method'] = payload.reduce((acc, request) => acc.push(request.method), []).join(',');
+      this.options.headers['X-JsonRpc-Method'] = request.reduce((acc, request) => acc.push(request.method), []).join(',');
     }
 
     return this;
   }
 }
+
+export default Fetch;

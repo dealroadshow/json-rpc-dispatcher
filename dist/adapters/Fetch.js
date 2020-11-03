@@ -51,49 +51,35 @@ var Fetch = /*#__PURE__*/function () {
   /**
    * Send request to server
    *
-   * @param {string} payload
+   * @param {string} request
    *
    * @return {Promise}
    */
 
 
   _createClass(Fetch, [{
-    key: "request",
-    value: function request(payload) {
-      this.addMethodHeader(payload);
+    key: "call",
+    value: function call(request) {
+      this.addMethodHeader(request);
       return fetch(this.url, _objectSpread({
-        body: JSON.stringify(payload)
+        body: JSON.stringify(request)
       }, this.options)).then(function (data) {
         return data.json();
       });
     }
     /**
-     * Send notification to server
-     *
-     * @param {string} payload
-     */
-
-  }, {
-    key: "notify",
-    value: function notify(payload) {
-      this.addMethodHeader(payload);
-      return fetch(this.url, _objectSpread({
-        body: JSON.stringify(payload)
-      }, this.options));
-    }
-    /**
      * Adds method header for logging purposes
      *
-     * @param payload
+     * @param request
      */
 
   }, {
     key: "addMethodHeader",
-    value: function addMethodHeader(payload) {
-      if (!Array.isArray(payload)) {
-        this.options.headers['X-JsonRpc-Method'] = payload.method;
+    value: function addMethodHeader(request) {
+      if (!Array.isArray(request)) {
+        this.options.headers['X-JsonRpc-Method'] = request.method;
       } else {
-        this.options.headers['X-JsonRpc-Method'] = payload.reduce(function (acc, request) {
+        this.options.headers['X-JsonRpc-Method'] = request.reduce(function (acc, request) {
           return acc.push(request.method);
         }, []).join(',');
       }
@@ -105,4 +91,5 @@ var Fetch = /*#__PURE__*/function () {
   return Fetch;
 }();
 
-exports.default = Fetch;
+var _default = Fetch;
+exports.default = _default;

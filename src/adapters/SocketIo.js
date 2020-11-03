@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
+import Notification from '../jsonrpc/request/Notification';
 
-export default class SocketIo {
+class SocketIo {
   /**
    *
    * @param {io} socket
@@ -12,13 +13,17 @@ export default class SocketIo {
   /**
    * Send request to server
    *
-   * @param {string} payload
+   * @param {string} request
    *
    * @return {Promise}
    */
-  request(payload) {
+  call(request) {
     const id = uuid();
-    this.socket.emit('request', JSON.stringify(payload));
+    this.socket.emit('request', JSON.stringify(request));
+
+    if (request instanceof Notification) {
+      return Promise.resolve();
+    }
 
     return new Promise((resolve) => {
       this.socket.on(`response.${ id }`, (data) => {
@@ -26,17 +31,6 @@ export default class SocketIo {
       });
     });
   }
-
-  /**
-   * Send notification to server
-   *
-   * @param {string} payload
-   *
-   * @return {Promise}
-   */
-  notify(payload) {
-    this.socket.emit('request', JSON.stringify(payload));
-
-    return Promise.resolve();
-  }
 }
+
+export default SocketIo;
