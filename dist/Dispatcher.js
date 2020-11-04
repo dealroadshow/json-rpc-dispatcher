@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _Notification = _interopRequireDefault(require("./jsonrpc/request/Notification"));
+
 var _parse = _interopRequireDefault(require("./jsonrpc/parse"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -50,30 +52,39 @@ var Dispatcher = /*#__PURE__*/function () {
             switch (_context.prev = _context.next) {
               case 0:
                 jsonRpcPayload = this.execRequestInterceptors((0, _parse.default)(payload));
-                _context.prev = 1;
-                _context.next = 4;
+
+                if (!(payload instanceof _Notification.default)) {
+                  _context.next = 3;
+                  break;
+                }
+
+                return _context.abrupt("return", true);
+
+              case 3:
+                _context.prev = 3;
+                _context.next = 6;
                 return this.getAdapter().call(jsonRpcPayload);
 
-              case 4:
+              case 6:
                 response = _context.sent;
-                _context.next = 10;
+                _context.next = 12;
                 break;
 
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](1);
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](3);
                 response = _context.t0;
 
-              case 10:
+              case 12:
                 response = (0, _parse.default)(response);
                 return _context.abrupt("return", this.execResponseInterceptors(response, jsonRpcPayload));
 
-              case 12:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[1, 7]]);
+        }, _callee, this, [[3, 9]]);
       }));
 
       function call(_x) {
