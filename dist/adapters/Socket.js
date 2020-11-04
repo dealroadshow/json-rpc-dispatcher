@@ -21,6 +21,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var RESPONSE_TIMEOUT = 300000; // 300000 seconds
 
+var SOCKET_REQUEST_URL_HEADER = 'socket.requestUrl';
+
 var Socket = /*#__PURE__*/function () {
   function Socket(url, sockJsConnection) {
     _classCallCheck(this, Socket);
@@ -78,12 +80,12 @@ var Socket = /*#__PURE__*/function () {
 
       if (Array.isArray(request)) {
         return request.map(function (req) {
-          req.params.headers['socket.url'] = _this2.url;
+          req.params.headers[SOCKET_REQUEST_URL_HEADER] = _this2.url;
           return req;
         });
       }
 
-      request.params.headers['socket.url'] = this.url;
+      request.params.headers[SOCKET_REQUEST_URL_HEADER] = this.url;
       return request;
     }
     /**

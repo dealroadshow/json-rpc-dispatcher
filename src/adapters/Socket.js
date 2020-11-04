@@ -3,6 +3,7 @@ import parse from '../jsonrpc/parse';
 import JsonRpcError from '../jsonrpc/response/JsonRpcError';
 
 const RESPONSE_TIMEOUT = 300000; // 300000 seconds
+const SOCKET_REQUEST_URL_HEADER = 'socket.requestUrl';
 
 class Socket {
   constructor(url, sockJsConnection) {
@@ -48,11 +49,11 @@ class Socket {
   addSocketUrlHeader(request) {
     if (Array.isArray(request)) {
       return request.map((req) => {
-        req.params.headers['socket.url'] = this.url;
+        req.params.headers[SOCKET_REQUEST_URL_HEADER] = this.url;
         return req;
       });
     }
-    request.params.headers['socket.url'] = this.url;
+    request.params.headers[SOCKET_REQUEST_URL_HEADER] = this.url;
 
     return request;
   }
