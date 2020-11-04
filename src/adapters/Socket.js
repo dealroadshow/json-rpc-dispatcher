@@ -4,7 +4,7 @@ import JsonRpcError from '../jsonrpc/response/JsonRpcError';
 
 const RESPONSE_TIMEOUT = 300000; // 300000 seconds
 
-class SockJsRpc {
+class Socket {
   constructor(sockJsConnection) {
     this.connection = sockJsConnection;
   }
@@ -58,4 +58,4 @@ class SockJsRpc {
   }
 }
 
-export default SockJsRpc;
+export default Socket;

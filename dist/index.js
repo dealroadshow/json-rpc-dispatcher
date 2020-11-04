@@ -45,6 +45,8 @@ var _Fetch = _interopRequireDefault(require("./adapters/Fetch"));
 
 var _SocketIo = _interopRequireDefault(require("./adapters/SocketIo"));
 
+var _Socket = _interopRequireDefault(require("./adapters/Socket"));
+
 var _Dispatcher = _interopRequireDefault(require("./Dispatcher"));
 
 var _transformErrorToException = _interopRequireDefault(require("./interceptors/response/transformErrorToException"));
@@ -65,7 +67,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var adapters = {
   Fetch: _Fetch.default,
-  SocketIo: _SocketIo.default
+  SocketIo: _SocketIo.default,
+  Socket: _Socket.default
 };
 exports.adapters = adapters;
 var interceptors = {

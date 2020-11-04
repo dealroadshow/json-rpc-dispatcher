@@ -21,9 +21,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var RESPONSE_TIMEOUT = 300000; // 300000 seconds
 
-var SockJsRpc = /*#__PURE__*/function () {
-  function SockJsRpc(sockJsConnection) {
-    _classCallCheck(this, SockJsRpc);
+var Socket = /*#__PURE__*/function () {
+  function Socket(sockJsConnection) {
+    _classCallCheck(this, Socket);
 
     this.connection = sockJsConnection;
   }
@@ -35,7 +35,7 @@ var SockJsRpc = /*#__PURE__*/function () {
    */
 
 
-  _createClass(SockJsRpc, [{
+  _createClass(Socket, [{
     key: "call",
     value: function call(request) {
       var _this = this;
@@ -86,8 +86,8 @@ var SockJsRpc = /*#__PURE__*/function () {
     }
   }]);
 
-  return SockJsRpc;
+  return Socket;
 }();
 
-var _default = SockJsRpc;
+var _default = Socket;
 exports.default = _default;
