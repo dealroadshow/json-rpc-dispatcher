@@ -1,6 +1,5 @@
 import Fetch from './adapters/Fetch';
 import SocketIo from './adapters/SocketIo';
-import Socket from './adapters/Socket';
 import Dispatcher from './Dispatcher';
 import transformErrorToException from './interceptors/response/transformErrorToException';
 import Notification from './jsonrpc/request/Notification';
@@ -12,8 +11,7 @@ import parse from './jsonrpc/parse';
 
 const adapters = {
   Fetch,
-  SocketIo,
-  Socket
+  SocketIo
 };
 
 const interceptors = {
