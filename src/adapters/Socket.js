@@ -5,7 +5,8 @@ import JsonRpcError from '../jsonrpc/response/JsonRpcError';
 const RESPONSE_TIMEOUT = 300000; // 300000 seconds
 
 class Socket {
-  constructor(sockJsConnection) {
+  constructor(url, sockJsConnection) {
+    this.url = url;
     this.connection = sockJsConnection;
   }
 
@@ -16,7 +17,7 @@ class Socket {
    * @return {Promise<unknown>|Promise<void>}
    */
   call(request) {
-    this.connection.send(JSON.stringify(request));
+    this.connection.send(JSON.stringify(this.addSocketUrlHeader(request)));
 
     if (request instanceof Notification) {
       return Promise.resolve();
@@ -36,6 +37,24 @@ class Socket {
         }
       };
     });
+  }
+
+  /**
+   * Add url header to request
+   *
+   * @param request
+   * @return {*|number}
+   */
+  addSocketUrlHeader(request) {
+    if (Array.isArray(request)) {
+      return request.map((req) => {
+        req.params.headers['socket.url'] = this.url;
+        return req;
+      });
+    }
+    request.params.headers['socket.url'] = this.url;
+
+    return request;
   }
 
   /**

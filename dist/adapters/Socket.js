@@ -22,9 +22,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var RESPONSE_TIMEOUT = 300000; // 300000 seconds
 
 var Socket = /*#__PURE__*/function () {
-  function Socket(sockJsConnection) {
+  function Socket(url, sockJsConnection) {
     _classCallCheck(this, Socket);
 
+    this.url = url;
     this.connection = sockJsConnection;
   }
   /**
@@ -40,7 +41,7 @@ var Socket = /*#__PURE__*/function () {
     value: function call(request) {
       var _this = this;
 
-      this.connection.send(JSON.stringify(request));
+      this.connection.send(JSON.stringify(this.addSocketUrlHeader(request)));
 
       if (request instanceof _Notification.default) {
         return Promise.resolve();
@@ -62,6 +63,28 @@ var Socket = /*#__PURE__*/function () {
           }
         };
       });
+    }
+    /**
+     * Add url header to request
+     *
+     * @param request
+     * @return {*|number}
+     */
+
+  }, {
+    key: "addSocketUrlHeader",
+    value: function addSocketUrlHeader(request) {
+      var _this2 = this;
+
+      if (Array.isArray(request)) {
+        return request.map(function (req) {
+          req.params.headers['socket.url'] = _this2.url;
+          return req;
+        });
+      }
+
+      request.params.headers['socket.url'] = this.url;
+      return request;
     }
     /**
      * Will match of response corresponds to request using request id
