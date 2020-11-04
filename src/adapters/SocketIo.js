@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid';
-import Notification from '../jsonrpc/request/Notification';
 
 class SocketIo {
   /**
@@ -21,7 +20,7 @@ class SocketIo {
     const id = uuid();
     this.socket.emit('request', JSON.stringify(request));
 
-    if (request instanceof Notification) {
+    if (!request.id) {
       return Promise.resolve();
     }
 

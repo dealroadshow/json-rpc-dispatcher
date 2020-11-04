@@ -1,4 +1,3 @@
-import Notification from './jsonrpc/request/Notification';
 import parse from './jsonrpc/parse';
 
 export default class Dispatcher {
@@ -22,19 +21,17 @@ export default class Dispatcher {
   async call(payload) {
     const jsonRpcPayload = this.execRequestInterceptors(parse(payload));
 
-    if (payload instanceof Notification) {
-      return true;
-    }
-
     let response;
     try {
       response = await this.getAdapter().call(jsonRpcPayload);
     } catch (error) {
       response = error;
     }
-    response = parse(response);
+    if (!jsonRpcPayload?.id) {
+      return true;
+    }
 
-    return this.execResponseInterceptors(response, jsonRpcPayload);
+    return this.execResponseInterceptors(parse(response), jsonRpcPayload);
   }
 
   /**
