@@ -21,8 +21,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var Dispatcher = /*#__PURE__*/function () {
   /**
-   *
-   * @param {object} adapter
+   * @param {Object} adapter
    */
   function Dispatcher(adapter) {
     _classCallCheck(this, Dispatcher);
@@ -34,9 +33,9 @@ var Dispatcher = /*#__PURE__*/function () {
   /**
    * Execute remote procedure
    *
-   * @param {*} payload
+   * @param {Request|Notification} payload
    *
-   * @return {Success,Error}
+   * @return {Success|Error}
    */
 
 
@@ -166,7 +165,7 @@ var Dispatcher = /*#__PURE__*/function () {
     /**
      * Delete interceptor before response
      *
-     * @param {function} callback
+     * @param {Function} callback
      * @return {Dispatcher}
      */
 
@@ -181,8 +180,8 @@ var Dispatcher = /*#__PURE__*/function () {
     /**
      * Exec request interceptors
      *
-     * @param {object} payload
-     * @return {object}
+     * @param {Request|Notification|*} payload
+     * @return {Request|Notification}
      * @private
      */
 
@@ -201,9 +200,9 @@ var Dispatcher = /*#__PURE__*/function () {
     /**
      * Exec response interceptors
      *
-     * @param {object} response
-     * @param {object} payload
-     * @return {object}
+     * @param {Response|*} response
+     * @param {Request|Notification} payload
+     * @return {Response}
      * @private
      */
 

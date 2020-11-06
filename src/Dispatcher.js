@@ -2,8 +2,7 @@ import parse from './jsonrpc/parse';
 
 export default class Dispatcher {
   /**
-   *
-   * @param {object} adapter
+   * @param {Object} adapter
    */
   constructor(adapter) {
     this.adapter = adapter;
@@ -14,9 +13,9 @@ export default class Dispatcher {
   /**
    * Execute remote procedure
    *
-   * @param {*} payload
+   * @param {Request|Notification} payload
    *
-   * @return {Success,Error}
+   * @return {Success|Error}
    */
   async call(payload) {
     const jsonRpcPayload = this.execRequestInterceptors(parse(payload));
@@ -100,7 +99,7 @@ export default class Dispatcher {
   /**
    * Delete interceptor before response
    *
-   * @param {function} callback
+   * @param {Function} callback
    * @return {Dispatcher}
    */
   deleteResponseInterceptor(callback) {
@@ -112,8 +111,8 @@ export default class Dispatcher {
   /**
    * Exec request interceptors
    *
-   * @param {object} payload
-   * @return {object}
+   * @param {Request|Notification|*} payload
+   * @return {Request|Notification}
    * @private
    */
   execRequestInterceptors(payload) {
@@ -128,9 +127,9 @@ export default class Dispatcher {
   /**
    * Exec response interceptors
    *
-   * @param {object} response
-   * @param {object} payload
-   * @return {object}
+   * @param {Response|*} response
+   * @param {Request|Notification} payload
+   * @return {Response}
    * @private
    */
   execResponseInterceptors(response, payload) {
