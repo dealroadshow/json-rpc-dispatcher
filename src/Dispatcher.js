@@ -39,7 +39,7 @@ export default class Dispatcher {
    *
    * @param payload
    * @return {*|Promise.<*>}
-   * @deprecated
+   * @deprecated Use .call method instead
    */
   request(payload) {
     return this.call(payload);
@@ -49,7 +49,7 @@ export default class Dispatcher {
    * Notification
    *
    * @param payload
-   * @deprecated
+   * @deprecated Use .call method instead
    */
   notify(payload) {
     return this.call(payload);

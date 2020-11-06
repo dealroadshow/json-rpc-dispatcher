@@ -94,7 +94,7 @@ var Dispatcher = /*#__PURE__*/function () {
      *
      * @param payload
      * @return {*|Promise.<*>}
-     * @deprecated
+     * @deprecated Use .call method instead
      */
 
   }, {
@@ -106,7 +106,7 @@ var Dispatcher = /*#__PURE__*/function () {
      * Notification
      *
      * @param payload
-     * @deprecated
+     * @deprecated Use .call method instead
      */
 
   }, {
