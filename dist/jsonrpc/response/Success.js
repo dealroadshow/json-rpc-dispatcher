@@ -25,7 +25,7 @@ var Success = /*#__PURE__*/function () {
      * {*}
      */
 
-    this.result = payload.result;
+    this.result = payload.result || null;
   }
   /**
    * @return {string}

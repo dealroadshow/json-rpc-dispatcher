@@ -9,7 +9,7 @@ export default class Success {
     /**
      * {*}
      */
-    this.result = payload.result;
+    this.result = payload.result || null;
   }
 
   /**

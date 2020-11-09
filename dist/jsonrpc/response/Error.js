@@ -25,7 +25,7 @@ var Error = /*#__PURE__*/function () {
      * @type {{}}
      */
 
-    this.error = payload.error;
+    this.error = payload.error || null;
   }
   /**
    * @return {string}
