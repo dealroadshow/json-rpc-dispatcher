@@ -9,7 +9,7 @@ export default class Error {
     /**
      * @type {{}}
      */
-    this.error = payload.error || null;
+    this.error = payload.error || { data: null, message: null, code: null };
   }
 
   /**
