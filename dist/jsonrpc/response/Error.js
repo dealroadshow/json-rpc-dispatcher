@@ -25,7 +25,11 @@ var Error = /*#__PURE__*/function () {
      * @type {{}}
      */
 
-    this.error = payload.error || null;
+    this.error = payload.error || {
+      data: null,
+      message: null,
+      code: null
+    };
   }
   /**
    * @return {string}

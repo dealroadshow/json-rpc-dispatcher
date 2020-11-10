@@ -22,5 +22,4 @@ const interceptors = {
 
 export default Dispatcher;
 
-const RpcError = Error;
-export { Request, Notification, Success, Error, RpcError, JsonRpcError, adapters, interceptors, parse };
+export { Request, Notification, Success, Error, Error as RpcError, JsonRpcError, adapters, interceptors, parse };
