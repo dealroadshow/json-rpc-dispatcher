@@ -174,7 +174,9 @@ var Dispatcher = /*#__PURE__*/function () {
   }, {
     key: "deleteResponseInterceptor",
     value: function deleteResponseInterceptor(callback) {
-      this.requestInterceptors.delete(callback);
+      this.requestInterceptors = this.responseInterceptors.filter(function (el) {
+        return el !== callback;
+      });
       return this;
     }
     /**
@@ -207,14 +209,15 @@ var Dispatcher = /*#__PURE__*/function () {
                       while (1) {
                         switch (_context2.prev = _context2.next) {
                           case 0:
-                            _context2.next = 2;
-                            return callback(acc);
+                            _context2.t0 = callback;
+                            _context2.next = 3;
+                            return acc;
 
-                          case 2:
-                            acc = _context2.sent;
-                            return _context2.abrupt("return", acc);
+                          case 3:
+                            _context2.t1 = _context2.sent;
+                            return _context2.abrupt("return", (0, _context2.t0)(_context2.t1));
 
-                          case 4:
+                          case 5:
                           case "end":
                             return _context2.stop();
                         }
@@ -225,7 +228,7 @@ var Dispatcher = /*#__PURE__*/function () {
                   return function (_x3, _x4) {
                     return _ref.apply(this, arguments);
                   };
-                }(), request));
+                }(), Promise.resolve(request)));
 
               case 3:
               case "end":
@@ -272,14 +275,16 @@ var Dispatcher = /*#__PURE__*/function () {
                       while (1) {
                         switch (_context4.prev = _context4.next) {
                           case 0:
-                            _context4.next = 2;
-                            return callback(acc, request);
+                            _context4.t0 = callback;
+                            _context4.next = 3;
+                            return acc;
 
-                          case 2:
-                            acc = _context4.sent;
-                            return _context4.abrupt("return", acc);
+                          case 3:
+                            _context4.t1 = _context4.sent;
+                            _context4.t2 = request;
+                            return _context4.abrupt("return", (0, _context4.t0)(_context4.t1, _context4.t2));
 
-                          case 4:
+                          case 6:
                           case "end":
                             return _context4.stop();
                         }
@@ -290,7 +295,7 @@ var Dispatcher = /*#__PURE__*/function () {
                   return function (_x7, _x8) {
                     return _ref2.apply(this, arguments);
                   };
-                }(), response));
+                }(), Promise.resolve(response)));
 
               case 3:
               case "end":

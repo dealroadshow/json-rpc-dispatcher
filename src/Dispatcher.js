@@ -103,7 +103,7 @@ export default class Dispatcher {
    * @return {Dispatcher}
    */
   deleteResponseInterceptor(callback) {
-    this.requestInterceptors.delete(callback);
+    this.requestInterceptors = this.responseInterceptors.filter((el) => el !== callback);
 
     return this;
   }
@@ -119,10 +119,10 @@ export default class Dispatcher {
     if (!this.requestInterceptors.length) {
       return request;
     }
-    return Array.from(this.requestInterceptors).reduce(async (acc, callback) => {
-      acc = await callback(acc);
-      return acc;
-    }, request);
+    return Array.from(this.requestInterceptors).reduce(
+      async (acc, callback) => callback(await acc),
+      Promise.resolve(request)
+    );
   }
 
   /**
@@ -137,10 +137,10 @@ export default class Dispatcher {
     if (!this.responseInterceptors.length) {
       return response;
     }
-    return Array.from(this.responseInterceptors).reduce(async (acc, callback) => {
-      acc = await callback(acc, request);
-      return acc;
-    }, response);
+    return Array.from(this.responseInterceptors).reduce(
+      async (acc, callback) => callback(await acc, request),
+      Promise.resolve(response)
+    );
   }
 
   /**
