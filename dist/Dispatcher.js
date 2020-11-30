@@ -27,8 +27,8 @@ var Dispatcher = /*#__PURE__*/function () {
     _classCallCheck(this, Dispatcher);
 
     this.adapter = adapter;
-    this.requestInterceptors = [];
-    this.responseInterceptors = [];
+    this.requestInterceptors = new Set();
+    this.responseInterceptors = new Set();
   }
   /**
    * Execute remote procedure
@@ -48,38 +48,42 @@ var Dispatcher = /*#__PURE__*/function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                jsonRpcPayload = this.execRequestInterceptors((0, _parse.default)(payload));
-                _context.prev = 1;
-                _context.next = 4;
+                _context.next = 2;
+                return this.execRequestInterceptors((0, _parse.default)(payload));
+
+              case 2:
+                jsonRpcPayload = _context.sent;
+                _context.prev = 3;
+                _context.next = 6;
                 return this.getAdapter().call(jsonRpcPayload);
 
-              case 4:
+              case 6:
                 response = _context.sent;
-                _context.next = 10;
+                _context.next = 12;
                 break;
 
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](1);
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](3);
                 response = _context.t0;
 
-              case 10:
+              case 12:
                 if (jsonRpcPayload === null || jsonRpcPayload === void 0 ? void 0 : jsonRpcPayload.id) {
-                  _context.next = 12;
+                  _context.next = 14;
                   break;
                 }
 
                 return _context.abrupt("return", true);
 
-              case 12:
+              case 14:
                 return _context.abrupt("return", this.execResponseInterceptors((0, _parse.default)(response), jsonRpcPayload));
 
-              case 13:
+              case 15:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[1, 7]]);
+        }, _callee, this, [[3, 9]]);
       }));
 
       function call(_x) {
@@ -127,7 +131,7 @@ var Dispatcher = /*#__PURE__*/function () {
         throw new TypeError('Interceptor must be a function');
       }
 
-      this.requestInterceptors.push(callback);
+      this.requestInterceptors.add(callback);
       return this;
     }
     /**
@@ -144,7 +148,7 @@ var Dispatcher = /*#__PURE__*/function () {
         throw new TypeError('Interceptor must be a function');
       }
 
-      this.responseInterceptors.push(callback);
+      this.responseInterceptors.add(callback);
       return this;
     }
     /**
@@ -157,9 +161,7 @@ var Dispatcher = /*#__PURE__*/function () {
   }, {
     key: "deleteRequestInterceptor",
     value: function deleteRequestInterceptor(callback) {
-      this.requestInterceptors = this.requestInterceptors.filter(function (el) {
-        return el !== callback;
-      });
+      this.requestInterceptors.delete(callback);
       return this;
     }
     /**
@@ -180,44 +182,132 @@ var Dispatcher = /*#__PURE__*/function () {
     /**
      * Exec request interceptors
      *
-     * @param {Request|Notification|*} payload
-     * @return {Request|Notification}
+     * @param {Request|Notification|*} request
+     * @return {Promise<Request|Notification>}
      * @private
      */
 
   }, {
     key: "execRequestInterceptors",
-    value: function execRequestInterceptors(payload) {
-      if (!this.requestInterceptors.length) {
-        return payload;
+    value: function () {
+      var _execRequestInterceptors = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(request) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (this.requestInterceptors.length) {
+                  _context3.next = 2;
+                  break;
+                }
+
+                return _context3.abrupt("return", request);
+
+              case 2:
+                return _context3.abrupt("return", this.requestInterceptors.reduce( /*#__PURE__*/function () {
+                  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(acc, callback) {
+                    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                      while (1) {
+                        switch (_context2.prev = _context2.next) {
+                          case 0:
+                            _context2.next = 2;
+                            return callback(acc);
+
+                          case 2:
+                            acc = _context2.sent;
+                            return _context2.abrupt("return", acc);
+
+                          case 4:
+                          case "end":
+                            return _context2.stop();
+                        }
+                      }
+                    }, _callee2);
+                  }));
+
+                  return function (_x3, _x4) {
+                    return _ref.apply(this, arguments);
+                  };
+                }(), request));
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function execRequestInterceptors(_x2) {
+        return _execRequestInterceptors.apply(this, arguments);
       }
 
-      this.requestInterceptors.forEach(function (callback) {
-        payload = callback(payload);
-      });
-      return payload;
-    }
+      return execRequestInterceptors;
+    }()
     /**
      * Exec response interceptors
      *
      * @param {Response|*} response
-     * @param {Request|Notification} payload
-     * @return {Response}
+     * @param {Request|Notification} request
+     * @return {Promise<Response>}
      * @private
      */
 
   }, {
     key: "execResponseInterceptors",
-    value: function execResponseInterceptors(response, payload) {
-      if (!this.responseInterceptors.length) {
-        return response;
+    value: function () {
+      var _execResponseInterceptors = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(response, request) {
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                if (this.responseInterceptors.length) {
+                  _context5.next = 2;
+                  break;
+                }
+
+                return _context5.abrupt("return", response);
+
+              case 2:
+                return _context5.abrupt("return", this.responseInterceptors.reduce( /*#__PURE__*/function () {
+                  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(acc, callback) {
+                    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                      while (1) {
+                        switch (_context4.prev = _context4.next) {
+                          case 0:
+                            _context4.next = 2;
+                            return callback(acc, request);
+
+                          case 2:
+                            acc = _context4.sent;
+                            return _context4.abrupt("return", acc);
+
+                          case 4:
+                          case "end":
+                            return _context4.stop();
+                        }
+                      }
+                    }, _callee4);
+                  }));
+
+                  return function (_x7, _x8) {
+                    return _ref2.apply(this, arguments);
+                  };
+                }(), response));
+
+              case 3:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      function execResponseInterceptors(_x5, _x6) {
+        return _execResponseInterceptors.apply(this, arguments);
       }
 
-      this.responseInterceptors.forEach(function (callback) {
-        response = callback(response, payload);
-      });
-      return response;
-    }
+      return execResponseInterceptors;
+    }()
     /**
      * Get adapter
      *

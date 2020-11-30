@@ -6,8 +6,8 @@ export default class Dispatcher {
    */
   constructor(adapter) {
     this.adapter = adapter;
-    this.requestInterceptors = [];
-    this.responseInterceptors = [];
+    this.requestInterceptors = new Set();
+    this.responseInterceptors = new Set();
   }
 
   /**
@@ -18,7 +18,7 @@ export default class Dispatcher {
    * @return {Success|Error}
    */
   async call(payload) {
-    const jsonRpcPayload = this.execRequestInterceptors(parse(payload));
+    const jsonRpcPayload = await this.execRequestInterceptors(parse(payload));
 
     let response;
     try {
@@ -64,7 +64,7 @@ export default class Dispatcher {
     if (typeof callback !== 'function') {
       throw new TypeError('Interceptor must be a function');
     }
-    this.requestInterceptors.push(callback);
+    this.requestInterceptors.add(callback);
 
     return this;
   }
@@ -79,7 +79,7 @@ export default class Dispatcher {
     if (typeof callback !== 'function') {
       throw new TypeError('Interceptor must be a function');
     }
-    this.responseInterceptors.push(callback);
+    this.responseInterceptors.add(callback);
 
     return this;
   }
@@ -91,7 +91,7 @@ export default class Dispatcher {
    * @return {Dispatcher}
    */
   deleteRequestInterceptor(callback) {
-    this.requestInterceptors = this.requestInterceptors.filter((el) => el !== callback);
+    this.requestInterceptors.delete(callback);
 
     return this;
   }
@@ -111,34 +111,36 @@ export default class Dispatcher {
   /**
    * Exec request interceptors
    *
-   * @param {Request|Notification|*} payload
-   * @return {Request|Notification}
+   * @param {Request|Notification|*} request
+   * @return {Promise<Request|Notification>}
    * @private
    */
-  execRequestInterceptors(payload) {
+  async execRequestInterceptors(request) {
     if (!this.requestInterceptors.length) {
-      return payload;
+      return request;
     }
-    this.requestInterceptors.forEach((callback) => { payload = callback(payload); });
-
-    return payload;
+    return this.requestInterceptors.reduce(async (acc, callback) => {
+      acc = await callback(acc);
+      return acc;
+    }, request);
   }
 
   /**
    * Exec response interceptors
    *
    * @param {Response|*} response
-   * @param {Request|Notification} payload
-   * @return {Response}
+   * @param {Request|Notification} request
+   * @return {Promise<Response>}
    * @private
    */
-  execResponseInterceptors(response, payload) {
+  async execResponseInterceptors(response, request) {
     if (!this.responseInterceptors.length) {
       return response;
     }
-    this.responseInterceptors.forEach((callback) => { response = callback(response, payload); });
-
-    return response;
+    return this.responseInterceptors.reduce(async (acc, callback) => {
+      acc = await callback(acc, request);
+      return acc;
+    }, response);
   }
 
   /**
