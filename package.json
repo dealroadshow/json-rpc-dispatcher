@@ -9,7 +9,7 @@
     "jsonrpc",
     "client"
   ],
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "npm run lint && rm -rf dist && mkdir -p dist && npx babel ./src -d ./dist --ignore='node_modules,dist'",
     "lint": "eslint --fix ./src",
