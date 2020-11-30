@@ -190,52 +190,49 @@ var Dispatcher = /*#__PURE__*/function () {
   }, {
     key: "execRequestInterceptors",
     value: function () {
-      var _execRequestInterceptors = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(request) {
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      var _execRequestInterceptors = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(request) {
+        var interceptors, i;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 if (this.requestInterceptors.length) {
-                  _context3.next = 2;
+                  _context2.next = 2;
                   break;
                 }
 
-                return _context3.abrupt("return", request);
+                return _context2.abrupt("return", request);
 
               case 2:
-                return _context3.abrupt("return", Array.from(this.requestInterceptors).reduce( /*#__PURE__*/function () {
-                  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(acc, callback) {
-                    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-                      while (1) {
-                        switch (_context2.prev = _context2.next) {
-                          case 0:
-                            _context2.t0 = callback;
-                            _context2.next = 3;
-                            return acc;
+                interceptors = Array.from(this.requestInterceptors);
+                i = 0;
 
-                          case 3:
-                            _context2.t1 = _context2.sent;
-                            return _context2.abrupt("return", (0, _context2.t0)(_context2.t1));
+              case 4:
+                if (!(i < interceptors.length)) {
+                  _context2.next = 11;
+                  break;
+                }
 
-                          case 5:
-                          case "end":
-                            return _context2.stop();
-                        }
-                      }
-                    }, _callee2);
-                  }));
+                _context2.next = 7;
+                return interceptors[i](request);
 
-                  return function (_x3, _x4) {
-                    return _ref.apply(this, arguments);
-                  };
-                }(), Promise.resolve(request)));
+              case 7:
+                request = _context2.sent;
 
-              case 3:
+              case 8:
+                i++;
+                _context2.next = 4;
+                break;
+
+              case 11:
+                return _context2.abrupt("return", request);
+
+              case 12:
               case "end":
-                return _context3.stop();
+                return _context2.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee2, this);
       }));
 
       function execRequestInterceptors(_x2) {
@@ -256,56 +253,52 @@ var Dispatcher = /*#__PURE__*/function () {
   }, {
     key: "execResponseInterceptors",
     value: function () {
-      var _execResponseInterceptors = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(response, request) {
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      var _execResponseInterceptors = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(response, request) {
+        var interceptors, i;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 if (this.responseInterceptors.length) {
-                  _context5.next = 2;
+                  _context3.next = 2;
                   break;
                 }
 
-                return _context5.abrupt("return", response);
+                return _context3.abrupt("return", response);
 
               case 2:
-                return _context5.abrupt("return", Array.from(this.responseInterceptors).reduce( /*#__PURE__*/function () {
-                  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(acc, callback) {
-                    return regeneratorRuntime.wrap(function _callee4$(_context4) {
-                      while (1) {
-                        switch (_context4.prev = _context4.next) {
-                          case 0:
-                            _context4.t0 = callback;
-                            _context4.next = 3;
-                            return acc;
+                interceptors = Array.from(this.responseInterceptors);
+                i = 0;
 
-                          case 3:
-                            _context4.t1 = _context4.sent;
-                            _context4.t2 = request;
-                            return _context4.abrupt("return", (0, _context4.t0)(_context4.t1, _context4.t2));
+              case 4:
+                if (!(i < interceptors.length)) {
+                  _context3.next = 11;
+                  break;
+                }
 
-                          case 6:
-                          case "end":
-                            return _context4.stop();
-                        }
-                      }
-                    }, _callee4);
-                  }));
+                _context3.next = 7;
+                return interceptors[i](response, request);
 
-                  return function (_x7, _x8) {
-                    return _ref2.apply(this, arguments);
-                  };
-                }(), Promise.resolve(response)));
+              case 7:
+                response = _context3.sent;
 
-              case 3:
+              case 8:
+                i++;
+                _context3.next = 4;
+                break;
+
+              case 11:
+                return _context3.abrupt("return", response);
+
+              case 12:
               case "end":
-                return _context5.stop();
+                return _context3.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee3, this);
       }));
 
-      function execResponseInterceptors(_x5, _x6) {
+      function execResponseInterceptors(_x3, _x4) {
         return _execResponseInterceptors.apply(this, arguments);
       }
 

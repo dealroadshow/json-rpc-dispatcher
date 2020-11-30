@@ -119,10 +119,13 @@ export default class Dispatcher {
     if (!this.requestInterceptors.length) {
       return request;
     }
-    return Array.from(this.requestInterceptors).reduce(
-      async (acc, callback) => callback(await acc),
-      Promise.resolve(request)
-    );
+    const interceptors = Array.from(this.requestInterceptors);
+    for (let i = 0; i < interceptors.length; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      request = await interceptors[i](request);
+    }
+
+    return request;
   }
 
   /**
@@ -137,10 +140,13 @@ export default class Dispatcher {
     if (!this.responseInterceptors.length) {
       return response;
     }
-    return Array.from(this.responseInterceptors).reduce(
-      async (acc, callback) => callback(await acc, request),
-      Promise.resolve(response)
-    );
+    const interceptors = Array.from(this.responseInterceptors);
+    for (let i = 0; i < interceptors.length; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      response = await interceptors[i](response, request);
+    }
+
+    return response;
   }
 
   /**
