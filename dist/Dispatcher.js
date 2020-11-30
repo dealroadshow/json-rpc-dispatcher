@@ -43,7 +43,7 @@ var Dispatcher = /*#__PURE__*/function () {
     key: "call",
     value: function () {
       var _call = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(payload) {
-        var jsonRpcPayload, response;
+        var request, response;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -52,10 +52,10 @@ var Dispatcher = /*#__PURE__*/function () {
                 return this.execRequestInterceptors((0, _parse.default)(payload));
 
               case 2:
-                jsonRpcPayload = _context.sent;
+                request = _context.sent;
                 _context.prev = 3;
                 _context.next = 6;
-                return this.getAdapter().call(jsonRpcPayload);
+                return this.getAdapter().call(request);
 
               case 6:
                 response = _context.sent;
@@ -68,7 +68,7 @@ var Dispatcher = /*#__PURE__*/function () {
                 response = _context.t0;
 
               case 12:
-                if (jsonRpcPayload === null || jsonRpcPayload === void 0 ? void 0 : jsonRpcPayload.id) {
+                if (request === null || request === void 0 ? void 0 : request.id) {
                   _context.next = 14;
                   break;
                 }
@@ -76,7 +76,7 @@ var Dispatcher = /*#__PURE__*/function () {
                 return _context.abrupt("return", true);
 
               case 14:
-                return _context.abrupt("return", this.execResponseInterceptors((0, _parse.default)(response), jsonRpcPayload));
+                return _context.abrupt("return", this.execResponseInterceptors((0, _parse.default)(response), request));
 
               case 15:
               case "end":
@@ -174,9 +174,7 @@ var Dispatcher = /*#__PURE__*/function () {
   }, {
     key: "deleteResponseInterceptor",
     value: function deleteResponseInterceptor(callback) {
-      this.requestInterceptors = this.responseInterceptors.filter(function (el) {
-        return el !== callback;
-      });
+      this.requestInterceptors.delete(callback);
       return this;
     }
     /**
@@ -203,7 +201,7 @@ var Dispatcher = /*#__PURE__*/function () {
                 return _context3.abrupt("return", request);
 
               case 2:
-                return _context3.abrupt("return", this.requestInterceptors.reduce( /*#__PURE__*/function () {
+                return _context3.abrupt("return", Array.from(this.requestInterceptors).reduce( /*#__PURE__*/function () {
                   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(acc, callback) {
                     return regeneratorRuntime.wrap(function _callee2$(_context2) {
                       while (1) {
@@ -268,7 +266,7 @@ var Dispatcher = /*#__PURE__*/function () {
                 return _context5.abrupt("return", response);
 
               case 2:
-                return _context5.abrupt("return", this.responseInterceptors.reduce( /*#__PURE__*/function () {
+                return _context5.abrupt("return", Array.from(this.responseInterceptors).reduce( /*#__PURE__*/function () {
                   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(acc, callback) {
                     return regeneratorRuntime.wrap(function _callee4$(_context4) {
                       while (1) {

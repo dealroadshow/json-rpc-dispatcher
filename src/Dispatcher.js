@@ -18,19 +18,19 @@ export default class Dispatcher {
    * @return {Success|Error}
    */
   async call(payload) {
-    const jsonRpcPayload = await this.execRequestInterceptors(parse(payload));
+    const request = await this.execRequestInterceptors(parse(payload));
 
     let response;
     try {
-      response = await this.getAdapter().call(jsonRpcPayload);
+      response = await this.getAdapter().call(request);
     } catch (error) {
       response = error;
     }
-    if (!jsonRpcPayload?.id) {
+    if (!request?.id) {
       return true;
     }
 
-    return this.execResponseInterceptors(parse(response), jsonRpcPayload);
+    return this.execResponseInterceptors(parse(response), request);
   }
 
   /**
@@ -103,7 +103,7 @@ export default class Dispatcher {
    * @return {Dispatcher}
    */
   deleteResponseInterceptor(callback) {
-    this.requestInterceptors = this.responseInterceptors.filter((el) => el !== callback);
+    this.requestInterceptors.delete(callback);
 
     return this;
   }
@@ -119,7 +119,7 @@ export default class Dispatcher {
     if (!this.requestInterceptors.length) {
       return request;
     }
-    return this.requestInterceptors.reduce(async (acc, callback) => {
+    return Array.from(this.requestInterceptors).reduce(async (acc, callback) => {
       acc = await callback(acc);
       return acc;
     }, request);
@@ -137,7 +137,7 @@ export default class Dispatcher {
     if (!this.responseInterceptors.length) {
       return response;
     }
-    return this.responseInterceptors.reduce(async (acc, callback) => {
+    return Array.from(this.responseInterceptors).reduce(async (acc, callback) => {
       acc = await callback(acc, request);
       return acc;
     }, response);
