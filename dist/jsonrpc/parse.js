@@ -64,21 +64,24 @@ function parseJsonRpc(jsonRpc) {
 
 
 function parseObject(object) {
-  if (!object.method && !object.result && !object.error) {
+  if (!('method' in object) && !('result' in object) && !('error' in object)) {
     return _JsonRpcError.default.parseError({
       id: object.id,
       data: 'No method, result or error attributes found. Not Json Rpc 2 object'
     });
   }
 
-  if (object.method && (object.result || object.error)) {
+  if ('method' in object && ('result' in object || 'error' in object)) {
     return _JsonRpcError.default.parseError({
       id: object.id,
-      data: 'Method, and result or error attributes found. Not valid Json Rpc 2 object'
+      data: {
+        error: 'Method, and result or error attributes found. Not valid Json Rpc 2 object',
+        object: object
+      }
     });
   }
 
-  if (object.method) {
+  if ('method' in object) {
     return parseRequest(object);
   }
 
@@ -104,14 +107,17 @@ function parseRequest(object) {
 
 
 function parseResponse(object) {
-  if (object.result && object.error) {
+  if ('result' in object && 'error' in object) {
     return _JsonRpcError.default.parseError({
       id: object.id,
-      data: 'Result and error attributes found. Not valid Json Rpc 2 response object'
+      data: {
+        error: 'Result and error attributes found. Not valid Json Rpc 2 response object',
+        object: object
+      }
     });
   }
 
-  if (object.result) {
+  if ('result' in object) {
     return new _Success.default(object);
   }
 
