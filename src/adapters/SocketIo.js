@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid';
-
 class SocketIo {
   /**
    *
@@ -17,15 +15,15 @@ class SocketIo {
    * @return {Promise}
    */
   call(request) {
-    const id = uuid();
-    this.socket.emit('request', JSON.stringify(request));
-
-    if (!request.id) {
-      return Promise.resolve();
-    }
-
     return new Promise((resolve) => {
-      this.socket.on(`response.${ id }`, (data) => {
+      this.socket.emit('request', JSON.stringify(request));
+
+      if (!request.id) {
+        resolve();
+        return;
+      }
+
+      this.socket.on(`response.${ request.id }`, (data) => {
         resolve(data);
       });
     });
